@@ -1,0 +1,37 @@
+{
+  "name": "cytoscape-dom-node",
+  "version": "1.0.0",
+  "description": "Cytoscape extension for making nodes into DOM elements",
+  "keywords": [
+    "cytoscape",
+    "cytoscape-extension",
+    "dom",
+    "node"
+  ],
+  "author": {
+    "name": "Michael Wright",
+    "email": "mjw@methodanalysis.com"
+  },
+  "license": "MIT",
+  "main": "src/index.js",
+  "url": "https://github.com/mwri/cytoscape-dom-node",
+  "scripts": {
+    "prepublishOnly": "./node_modules/grunt-cli/bin/grunt prepublish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mwri/cytoscape-dom-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mwri/cytoscape-dom-node/issues"
+  },
+  "homepage": "https://github.com/mwri/cytoscape-dom-node#readme",
+  "peerDependencies": {
+    "cytoscape": "^3.19.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt-git": "^1.0.14",
+    "load-grunt-tasks": "^5.1.0"
+  }
+}
