@@ -31,6 +31,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "grunt": "^1.4.1",
     "grunt-cli": "^1.4.3",
     "grunt-git": "^1.0.14",
     "load-grunt-tasks": "^5.1.0"
