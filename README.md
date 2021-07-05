@@ -5,7 +5,7 @@ DOM element by setting the `dom` node data will cause the DOM element to be
 rendered on top of the node, and the node will be set to the size of the DOM
 element.
 
-For a full working demo, see [codepen YzVybPa](https://codepen.io/mwri/pen/abWdVOG).
+For a full working demo, see [codepen abWdVOG](https://codepen.io/mwri/pen/abWdVOG).
 
 ## Depenedencies
 
@@ -56,5 +56,5 @@ cy.add({
 
 The `div` you created will be shown as the node now.
 
-See [codepen YzVybPa](https://codepen.io/mwri/pen/abWdVOG) for a working
+See [codepen abWdVOG](https://codepen.io/mwri/pen/abWdVOG) for a working
 example.
