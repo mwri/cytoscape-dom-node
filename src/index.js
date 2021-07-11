@@ -6,14 +6,18 @@ class CytoscapeDomNode {
 
         let cy_container = cy.container();
 
-        let nodes_dom_container = document.createElement("div");
-        nodes_dom_container.style.position = 'absolute';
-        nodes_dom_container.style.zIndex = 10;
+        if (params.dom_container) {
+            this._nodes_dom_container = params.dom_container;
+        } else {
+            let nodes_dom_container = document.createElement("div");
+            nodes_dom_container.style.position = 'absolute';
+            nodes_dom_container.style.zIndex = 10;
 
-        let cy_canvas = cy_container.querySelector("canvas");
-        cy_canvas.parentNode.appendChild(nodes_dom_container);
+            let cy_canvas = cy_container.querySelector("canvas");
+            cy_canvas.parentNode.appendChild(nodes_dom_container);
 
-        this._nodes_dom_container = nodes_dom_container;
+            this._nodes_dom_container = nodes_dom_container;
+        }
 
         this._resize_observer = new ResizeObserver((entries) => {
             for (let e of entries) {

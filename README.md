@@ -58,3 +58,13 @@ The `div` you created will be shown as the node now.
 
 See [codepen abWdVOG](https://codepen.io/mwri/pen/abWdVOG) for a working
 example.
+
+## Options
+
+One option is supported, `dom_container` allows an container element to be specified which
+will be used for nodes instead of the element it would otherwise create and use. It is the
+callers responsibility to style the given element appropriately, for example:
+
+```js
+cy.domNode({'dom_container': some_element});
+```
