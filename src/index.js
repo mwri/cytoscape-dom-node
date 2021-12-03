@@ -32,8 +32,10 @@ class CytoscapeDomNode {
             this._add_node(ev.target);
         });
 
-        for (let n of cy.nodes())
-            this._add_node(n);
+        if (cy.nodes().length){
+            for (let n of cy.nodes())
+                this._add_node(n);
+        }
 
         cy.on("pan zoom", (ev) => {
             let pan  = cy.pan();
