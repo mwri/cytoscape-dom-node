@@ -1,0 +1,14 @@
+html, body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+}
+
+#cytoscape-dom-node-demo-container {
+    width: 100vw;
+    height: 100vh;
+}
+
+.my-cy-node {
+    background-color: #e55;
+}
