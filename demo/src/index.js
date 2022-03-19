@@ -1,15 +1,15 @@
 import cytoscape from 'cytoscape';
 import cytoscapeCoseBilkent from 'cytoscape-cose-bilkent';
 import cytoscapeDomNode from 'cytoscape-dom-node';
-
+import html2canvas from 'html2canvas';
 
 cytoscape.use(cytoscapeCoseBilkent);
 cytoscape.use(cytoscapeDomNode);
 
 
-function entry (dom_el) {
+function entry (cy_dom_el) {
     let cy = cytoscape({
-        'container': dom_el,
+        'container': cy_dom_el,
         'elements': [],
         'style': [{
             'selector': 'node',
@@ -90,7 +90,20 @@ function entry (dom_el) {
     setTimeout(function () {
         clearInterval(interval);
     }, 60000);
+
+    return cy;
 }
 
 
-export { entry as default };
+async function snapshot (target_dom_el) {
+    let canvas = await html2canvas(target_dom_el);
+    let url = canvas.toDataURL("image/jpeg");
+
+    return url;
+}
+
+
+export {
+    entry as default,
+    snapshot as snapshot,
+};

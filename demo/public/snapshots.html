@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Cytoscape DOM node demo</title>
+
+        <script src="cytoscape-dom-node-demo.bundle.js"></script>
+        <link rel="stylesheet" href="index.css"></link>
+    </head>
+
+    <body>
+        <div id="cytoscape-dom-node-demo-container"></div>
+        <div id="snapslot-link-container">
+            <a id="snapslot-link">Cytoscape PNG</a>
+            <br/>
+            <a id="snapslot-link">Canvas2HTML</a>
+        </div>
+    </body>
+
+    <script>
+        let cy = cytoscape_dom_node_demo.default(document.getElementById('cytoscape-dom-node-demo-container'));
+
+        let snapshot_interval = setInterval(async () => {
+            let cy_png = cy.png();
+            document.getElementById('snapslot-link-container').getElementsByTagName('a')[0].href = cy_png;
+
+            let snapshot_target_el = document.getElementById('cytoscape-dom-node-demo-container');
+            let snapshot = await cytoscape_dom_node_demo.snapshot(snapshot_target_el);
+            document.getElementById('snapslot-link-container').getElementsByTagName('a')[1].href = snapshot;
+
+            console.log('snapshot refreshed')
+        }, 2000);
+    </script>
+</html>

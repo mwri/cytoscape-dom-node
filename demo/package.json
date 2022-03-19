@@ -11,7 +11,8 @@
   "private": true,
   "dependencies": {
     "cytoscape": "^3.19.0",
-    "cytoscape-cose-bilkent": "^4.1.0"
+    "cytoscape-cose-bilkent": "^4.1.0",
+    "html2canvas": "^1.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
