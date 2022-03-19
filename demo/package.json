@@ -1,0 +1,25 @@
+{
+  "name": "cytoscape-dom-node-demo",
+  "version": "0.0.1",
+  "description": "Cytoscape DOM node demo",
+  "keywords": [],
+  "author": {
+    "name": "Michael Wright",
+    "email": "michael.wright@sky.uk"
+  },
+  "license": "LicenseRef-LICENSE",
+  "private": true,
+  "dependencies": {
+    "cytoscape": "^3.19.0",
+    "cytoscape-cose-bilkent": "^4.1.0",
+    "html2canvas": "^1.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

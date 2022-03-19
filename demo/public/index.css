@@ -1,0 +1,26 @@
+html, body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+
+#cytoscape-dom-node-demo-container {
+    width: 100vw;
+    height: 100vh;
+}
+
+#snapslot-link-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(10px, 10px);
+    padding: 0 5px;
+    background-color: white;
+    cursor: pointer;
+    text-decoration: none;
+    z-index: 100;
+}
+
+.my-cy-node {
+    background-color: #e55;
+}
