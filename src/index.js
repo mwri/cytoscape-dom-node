@@ -24,7 +24,7 @@ class CytoscapeDomNode {
                 let node_div = e.target;
                 let id = node_div.__cy_id;
                 let n  = cy.getElementById(id);
-                n.style({'width': node_div.offsetWidth, 'height': node_div.offsetHeight});
+                n.style({'width': node_div.offsetWidth, 'height': node_div.offsetHeight, shape: 'rectangle'});
             }
         });
 
