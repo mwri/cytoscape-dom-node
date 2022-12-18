@@ -29,11 +29,10 @@
   "peerDependencies": {
     "cytoscape": "^3.19.0"
   },
-  "dependencies": {},
   "devDependencies": {
-    "grunt": "^1.4.1",
+    "grunt": "^1.5.3",
     "grunt-cli": "^1.4.3",
-    "grunt-git": "^1.0.14",
+    "grunt-git": "^1.1.1",
     "load-grunt-tasks": "^5.1.0"
   }
 }
