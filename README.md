@@ -59,6 +59,24 @@ The `div` you created will be shown as the node now.
 See [codepen abWdVOG](https://codepen.io/mwri/pen/abWdVOG) for a working
 example.
 
+### Skip Node Append
+The `skip_node_append` option is a boolean flag (passed with node data) that controls whether the `cytoscape-dom-node` appends the provided node to the provided DOM container.
+By default, this option is set to false, meaning the `cytoscape-dom-node` will append the node to the container.
+
+However, in certain scenarios, such as when using EmberJS or another front-end framework, you might have already rendered the nodes to the DOM.
+In these cases, you can set `skip_node_append` to true to prevent the library from appending the node, allowing you to maintain control over the node's rendering process.
+
+```js
+let div = document.querySelector("#alreadyRenderedNodeId");
+cy.add({
+    'data': {
+        'id': id,
+        'dom': div,
+        'skip_node_append': true,
+    }
+})
+```
+
 ## Options
 
 One option is supported, `dom_container` allows an container element to be specified which

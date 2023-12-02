@@ -70,7 +70,9 @@ class CytoscapeDomNode {
         if (!data.dom)
             return;
 
-        this._nodes_dom_container.appendChild(data.dom);
+        if (data.skip_node_append !== true) {
+            this._nodes_dom_container.appendChild(data.dom);
+        }
         data.dom.__cy_id = n.id();
 
         this._node_dom[n.id()] = data.dom;
