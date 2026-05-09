@@ -60,7 +60,53 @@ class CytoscapeDomNode {
 
             dom.style.display = 'inline';
             dom.style.position = 'absolute';
+        });
+
+        cy.on('select', 'node', (ev) => {
+            let cy_node = ev.target;
+            let id      = cy_node.id();
+
+            if (!this._node_dom[id])
+                return;
+
+            let dom = this._node_dom[id];
+            dom.classList.add("selected");
+            dom.style['z-index'] = 11;
+        });
+        
+        cy.on('unselect', 'node', (ev) => {
+            let cy_node = ev.target;
+            let id      = cy_node.id();
+
+            if (!this._node_dom[id])
+                return;
+
+            let dom = this._node_dom[id];
+            dom.classList.remove("selected");
             dom.style['z-index'] = 10;
+        });
+
+        cy.on('grab', 'node', (ev) => {
+            let cy_node = ev.target;
+            let id      = cy_node.id();
+
+            if (!this._node_dom[id])
+                return;
+
+            let dom = this._node_dom[id];
+            dom.style['z-index'] = 11;
+        });
+
+        cy.on('free', 'node', (ev) => {
+            let cy_node = ev.target;
+            let id      = cy_node.id();
+
+            if (!this._node_dom[id])
+                return;
+
+            let dom = this._node_dom[id];
+            if(!dom.classList.contains("selected"))
+                dom.style['z-index'] = 10;
         });
     }
 
