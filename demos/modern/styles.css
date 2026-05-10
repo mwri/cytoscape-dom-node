@@ -126,7 +126,8 @@ button.danger:hover:not(:disabled) {
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(23, 32, 51, 0.14);
   background: #ffffff;
-  pointer-events: auto;
+  pointer-events: none;
+  user-select: none;
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease;

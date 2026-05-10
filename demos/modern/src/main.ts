@@ -76,9 +76,6 @@ function createDomNode(id: string, index: number): HTMLElement {
     <p>${String(index + 3)} linked tasks</p>
     <meter min="0" max="100" value="${String(45 + ((index * 13) % 45))}"></meter>
   `;
-  element.addEventListener("click", () => {
-    cy.getElementById(id).select();
-  });
 
   return element;
 }
