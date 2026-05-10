@@ -10,6 +10,7 @@ There are also more demos in [./demos](./demos/README.md).
 
 ## History
 
+v2.1.0 has bug fixes / improvements outstanding since v1.
 v2.0.0 - v2.0.1 is a typescript conversion, and SHOULD be backwards compatible with v1.
 v1.3.0 is the latest pre typescript incarnation.
 
