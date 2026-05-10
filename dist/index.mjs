@@ -6,10 +6,16 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
 var DEFAULT_Z_INDEX = "10";
 var ACTIVE_Z_INDEX = "11";
 var SELECTED_CLASS_NAME = "selected";
+var DEFAULT_INTERACTIVE_SELECTOR = "input, button, select, textarea, a[href], [contenteditable]:not([contenteditable='false']), [data-cy-dom-node-interactive]";
+var DEFAULT_INTERACTIVE_EVENTS = ["pointerdown", "mousedown", "touchstart"];
 var DomNodeRenderer = class {
   constructor(cy, options = {}) {
     __publicField(this, "cy");
     __publicField(this, "nodeElements", /* @__PURE__ */ new Map());
+    __publicField(this, "appendedNodeIds", /* @__PURE__ */ new Set());
+    __publicField(this, "interactiveElementBindings", /* @__PURE__ */ new Map());
+    __publicField(this, "interactiveEvents");
+    __publicField(this, "interactiveSelector");
     __publicField(this, "resizeObserver");
     __publicField(this, "container");
     __publicField(this, "handleNodeAdd", (event) => {
@@ -27,8 +33,14 @@ var DomNodeRenderer = class {
     __publicField(this, "handleViewport", () => {
       this.syncViewport();
     });
+    __publicField(this, "stopInteractiveEvent", (event) => {
+      event.stopPropagation();
+    });
+    var _a, _b;
     this.cy = cy;
     this.container = resolveDomContainer(cy, options);
+    this.interactiveEvents = (_a = options.interactiveEvents) != null ? _a : DEFAULT_INTERACTIVE_EVENTS;
+    this.interactiveSelector = (_b = options.interactiveSelector) != null ? _b : DEFAULT_INTERACTIVE_SELECTOR;
     this.resizeObserver = new (resolveResizeObserver(options))((entries) => {
       for (const entry of entries) {
         this.syncNodeSize(entry.target);
@@ -63,6 +75,8 @@ var DomNodeRenderer = class {
     this.cy.off("select unselect grab free", "node", this.handleNodeState);
     this.resizeObserver.disconnect();
     this.nodeElements.clear();
+    this.appendedNodeIds.clear();
+    this.clearInteractiveElements();
   }
   bindEvents() {
     this.cy.on("add", "node", this.handleNodeAdd);
@@ -84,19 +98,31 @@ var DomNodeRenderer = class {
     }
     element.__cy_id = nodeId;
     this.nodeElements.set(nodeId, element);
+    if (shouldAppend) {
+      this.appendedNodeIds.add(nodeId);
+    } else {
+      this.appendedNodeIds.delete(nodeId);
+    }
+    this.bindInteractiveElements(nodeId, element);
     this.resizeObserver.observe(element);
     this.syncNodeSize(element);
     this.syncNodePosition(node);
     this.syncNodeState(node);
   }
   removeNode(node) {
-    const element = this.nodeElements.get(node.id());
+    var _a;
+    const nodeId = node.id();
+    const element = this.nodeElements.get(nodeId);
     if (!element) {
       return;
     }
     this.resizeObserver.unobserve(element);
     delete element.__cy_id;
-    this.nodeElements.delete(node.id());
+    this.nodeElements.delete(nodeId);
+    this.clearInteractiveElements(nodeId);
+    if (this.appendedNodeIds.delete(nodeId)) {
+      (_a = element.parentNode) == null ? void 0 : _a.removeChild(element);
+    }
   }
   syncViewport() {
     const pan = this.cy.pan();
@@ -145,6 +171,49 @@ var DomNodeRenderer = class {
     const isActive = isSelected || node.grabbed();
     element.classList.toggle(SELECTED_CLASS_NAME, isSelected);
     element.style.zIndex = isActive ? ACTIVE_Z_INDEX : DEFAULT_Z_INDEX;
+  }
+  bindInteractiveElements(nodeId, root) {
+    this.clearInteractiveElements(nodeId);
+    if (!this.interactiveSelector) {
+      return;
+    }
+    const elements = root.querySelectorAll(this.interactiveSelector);
+    const bindings = [];
+    for (const element of elements) {
+      bindings.push({
+        element,
+        previousPointerEvents: element.style.pointerEvents
+      });
+      element.style.pointerEvents = "auto";
+      for (const eventName of this.interactiveEvents) {
+        element.addEventListener(eventName, this.stopInteractiveEvent, true);
+      }
+    }
+    if (bindings.length > 0) {
+      this.interactiveElementBindings.set(nodeId, bindings);
+    }
+  }
+  clearInteractiveElements(nodeId) {
+    if (nodeId) {
+      this.clearInteractiveElementBindings(nodeId);
+      return;
+    }
+    for (const id of this.interactiveElementBindings.keys()) {
+      this.clearInteractiveElementBindings(id);
+    }
+  }
+  clearInteractiveElementBindings(nodeId) {
+    const bindings = this.interactiveElementBindings.get(nodeId);
+    if (!bindings) {
+      return;
+    }
+    for (const binding of bindings) {
+      binding.element.style.pointerEvents = binding.previousPointerEvents;
+      for (const eventName of this.interactiveEvents) {
+        binding.element.removeEventListener(eventName, this.stopInteractiveEvent, true);
+      }
+    }
+    this.interactiveElementBindings.delete(nodeId);
   }
 };
 function register(cytoscapeInstance) {

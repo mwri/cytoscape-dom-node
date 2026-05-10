@@ -29,6 +29,16 @@ interface DomNodeOptions {
      * browser environments that provide a polyfill.
      */
     resizeObserver?: ResizeObserverConstructor;
+    /**
+     * Selector for child controls that should receive native DOM interaction
+     * instead of starting Cytoscape gestures. Set to `false` to disable this
+     * automatic event isolation.
+     */
+    interactiveSelector?: string | false;
+    /**
+     * Event names stopped on interactive child controls during the capture phase.
+     */
+    interactiveEvents?: readonly string[];
 }
 declare global {
     namespace cytoscape {
@@ -57,6 +67,10 @@ declare module "cytoscape" {
 declare class DomNodeRenderer {
     private readonly cy;
     private readonly nodeElements;
+    private readonly appendedNodeIds;
+    private readonly interactiveElementBindings;
+    private readonly interactiveEvents;
+    private readonly interactiveSelector;
     private readonly resizeObserver;
     private readonly container;
     private readonly handleNodeAdd;
@@ -64,6 +78,7 @@ declare class DomNodeRenderer {
     private readonly handleNodePosition;
     private readonly handleNodeState;
     private readonly handleViewport;
+    private readonly stopInteractiveEvent;
     constructor(cy: cytoscape.Core, options?: DomNodeOptions);
     /**
      * Return the DOM element that backs a Cytoscape node id.
@@ -84,6 +99,9 @@ declare class DomNodeRenderer {
     private syncNodeSize;
     private syncNodePosition;
     private syncNodeState;
+    private bindInteractiveElements;
+    private clearInteractiveElements;
+    private clearInteractiveElementBindings;
 }
 
 /**
