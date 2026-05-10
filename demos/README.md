@@ -18,7 +18,7 @@ python3 -m http.server 8080
 Then open:
 
 ```text
-http://localhost:8080/demo/modern
+http://localhost:8080/demos/modern
 ```
 
 ## `legacy-webpack`
@@ -31,7 +31,7 @@ Run it, from the repository root:
 npm install
 npm run build
 
-cd demo/legacy-webpack
+cd demos/legacy-webpack
 npm install
 NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack-dev-server --debug
 ```
@@ -65,5 +65,5 @@ python3 -m http.server 8080
 Then open:
 
 ```text
-http://localhost:8080/demo/legacy-codepen/
+http://localhost:8080/demos/legacy-codepen/
 ```

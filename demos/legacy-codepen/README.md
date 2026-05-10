@@ -13,5 +13,5 @@ python3 -m http.server 8080
 Then open:
 
 ```text
-http://localhost:8080/demo/legacy-codepen
+http://localhost:8080/demos/legacy-codepen
 ```

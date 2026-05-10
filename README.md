@@ -6,7 +6,12 @@ rendered on top of the node, and the node will be set to the size of the DOM
 element.
 
 For a full working demo, see [codepen abWdVOG](https://codepen.io/mwri/pen/abWdVOG).
-There are also more demos in [./demo](./demo).
+There are also more demos in [./demos](./demos/README.md).
+
+## History
+
+v2.0.0 is a typescript conversion, and SHOULD be backwards compatible with v1.
+v1.3.0 is the latest pre typescript incarnation.
 
 ## Dependencies
 

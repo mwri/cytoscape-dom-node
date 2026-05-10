@@ -1,5 +1,11 @@
 import cytoscape from 'cytoscape';
 
+/**
+ * Index.
+ *
+ * @packageDocumentation
+ */
+
 type CytoscapeRegistry = typeof cytoscape;
 /**
  * Constructor shape for ResizeObserver implementations or polyfills.

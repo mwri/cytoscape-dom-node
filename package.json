@@ -37,7 +37,7 @@
   "url": "https://github.com/mwri/cytoscape-dom-node",
   "scripts": {
     "build": "tsup",
-    "build:demo:modern": "tsc -p demo/modern/tsconfig.json",
+    "build:demo:modern": "tsc -p demos/modern/tsconfig.json",
     "check": "npm run lint && npm run typecheck && npm run test:coverage && npm run build && npm run build:demo:modern && npm run docs",
     "docs": "typedoc",
     "format": "prettier --write .",
