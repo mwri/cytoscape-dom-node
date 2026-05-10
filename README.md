@@ -85,6 +85,10 @@ const nodeElement = domNodeRenderer.nodeDom(id);
 
 The previous `node_dom(id)` method is kept as a backwards compatible alias.
 
+When a Cytoscape node is removed, `cytoscape-dom-node` removes the DOM element
+it appended for that node. Nodes using `skipNodeAppend` remain caller-owned and
+are not removed from the DOM.
+
 See [codepen abWdVOG](https://codepen.io/mwri/pen/abWdVOG) for a working
 example.
 

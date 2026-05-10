@@ -39,6 +39,22 @@ button:hover {
   background: #f8fafc;
 }
 
+button:disabled {
+  color: #94a3b8;
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+button.danger {
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+button.danger:hover:not(:disabled) {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
 .app-shell {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);

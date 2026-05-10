@@ -330,7 +330,7 @@ it("disconnects event handlers and resize observation on destroy", () => {
   expect(dom.classList.contains("selected")).toBe(false);
 });
 
-it("unobserves DOM elements when Cytoscape nodes are removed", () => {
+it("removes appended DOM elements when Cytoscape nodes are removed", () => {
   const domContainer = document.createElement("div");
   const dom = document.createElement("div") as HTMLElement & { __cy_id?: string };
   const cy = createCore([
@@ -349,6 +349,35 @@ it("unobserves DOM elements when Cytoscape nodes are removed", () => {
 
   expect(renderer.nodeDom("a")).toBeUndefined();
   expect(observer?.observedElements.has(dom)).toBe(false);
+  expect(domContainer.children).toHaveLength(0);
+  expect(dom.parentElement).toBeNull();
+  expect(dom.__cy_id).toBeUndefined();
+});
+
+it("keeps caller-owned skipped DOM elements in place when Cytoscape nodes are removed", () => {
+  const domContainer = document.createElement("div");
+  const existingParent = document.createElement("div");
+  const dom = document.createElement("div") as HTMLElement & { __cy_id?: string };
+  existingParent.appendChild(dom);
+
+  const cy = createCore([
+    {
+      data: {
+        dom,
+        id: "a",
+        skipNodeAppend: true,
+      },
+    },
+  ]);
+
+  const renderer = createRenderer(cy, { domContainer });
+  const observer = TestResizeObserver.instances[0];
+
+  cy.getElementById("a").remove();
+
+  expect(renderer.nodeDom("a")).toBeUndefined();
+  expect(observer?.observedElements.has(dom)).toBe(false);
+  expect(dom.parentElement).toBe(existingParent);
   expect(dom.__cy_id).toBeUndefined();
 });
 
