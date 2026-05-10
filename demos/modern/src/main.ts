@@ -20,6 +20,9 @@ const nodeCount = requiredElement("#node-count");
 const edgeCount = requiredElement("#edge-count");
 const selectedNode = requiredElement("#selected-node");
 const domLookup = requiredElement("#dom-lookup");
+const domCount = requiredElement("#dom-count");
+const deleteNodeButton = requiredElement("#delete-node") as HTMLButtonElement;
+let nextNodeIndex = 0;
 
 const cy = cytoscape({
   container: graphContainer,
@@ -84,8 +87,8 @@ function addNode(
   sourceId: string | null = null,
   animatePlacement = false,
 ): cytoscape.NodeSingular {
-  const id = `n${String(cy.nodes().length)}`;
-  const index = cy.nodes().length;
+  const index = nextNodeIndex;
+  const id = `n${String(index)}`;
   const targetPosition = nextNodePosition(sourceId, index);
   const startPosition =
     animatePlacement && sourceId
@@ -99,6 +102,7 @@ function addNode(
     },
     position: startPosition,
   }) as cytoscape.NodeSingular;
+  nextNodeIndex += 1;
 
   if (sourceId) {
     cy.add({
@@ -348,14 +352,36 @@ function branchStartPosition(
   };
 }
 
-function selectedOrLastNodeId(): string {
+function selectedOrLastNodeId(): string | null {
   const selected = cy.nodes(":selected");
 
   if (selected.length > 0) {
-    return selected[0]?.id() ?? cy.nodes().last().id();
+    return selected[0]?.id() ?? null;
   }
 
-  return cy.nodes().last().id();
+  return cy.nodes().last()[0]?.id() ?? null;
+}
+
+function deleteSelectedNode(): void {
+  const selected = cy.nodes(":selected")[0];
+
+  if (!selected) {
+    return;
+  }
+
+  const fallbackNode = selectFallbackNode(selected);
+
+  selected.remove();
+  fallbackNode?.select();
+  cy.fit(undefined, 70);
+  updateStatus();
+}
+
+function selectFallbackNode(removedNode: cytoscape.NodeSingular): cytoscape.NodeSingular | null {
+  const neighborhood = removedNode.neighborhood("node");
+  const sibling = neighborhood[0] ?? cy.nodes().not(removedNode)[0];
+
+  return sibling ?? null;
 }
 
 function updateStatus(): void {
@@ -366,6 +392,8 @@ function updateStatus(): void {
   edgeCount.textContent = String(cy.edges().length);
   selectedNode.textContent = selected ? selected.id() : "None";
   domLookup.textContent = domElement ? domElement.tagName.toLowerCase() : "None";
+  domCount.textContent = String(domContainer.childElementCount);
+  deleteNodeButton.disabled = !selected;
 }
 
 requiredElement("#add-node").addEventListener("click", () => {
@@ -385,6 +413,8 @@ requiredElement("#select-random").addEventListener("click", () => {
   cy.nodes().unselect();
   node?.select();
 });
+
+deleteNodeButton.addEventListener("click", deleteSelectedNode);
 
 requiredElement("#run-layout").addEventListener("click", runLayout);
 

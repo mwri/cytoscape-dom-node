@@ -80,6 +80,7 @@ declare module "cytoscape" {
 export class DomNodeRenderer {
   private readonly cy: cytoscape.Core;
   private readonly nodeElements = new Map<string, DomNodeElement>();
+  private readonly appendedNodeIds = new Set<string>();
   private readonly resizeObserver: ResizeObserver;
   private readonly container: HTMLElement;
 
@@ -144,6 +145,7 @@ export class DomNodeRenderer {
     this.cy.off("select unselect grab free", "node", this.handleNodeState);
     this.resizeObserver.disconnect();
     this.nodeElements.clear();
+    this.appendedNodeIds.clear();
   }
 
   private bindEvents(): void {
@@ -171,6 +173,11 @@ export class DomNodeRenderer {
 
     element.__cy_id = nodeId;
     this.nodeElements.set(nodeId, element);
+    if (shouldAppend) {
+      this.appendedNodeIds.add(nodeId);
+    } else {
+      this.appendedNodeIds.delete(nodeId);
+    }
     this.resizeObserver.observe(element);
 
     this.syncNodeSize(element);
@@ -179,7 +186,8 @@ export class DomNodeRenderer {
   }
 
   private removeNode(node: cytoscape.NodeSingular): void {
-    const element = this.nodeElements.get(node.id());
+    const nodeId = node.id();
+    const element = this.nodeElements.get(nodeId);
 
     if (!element) {
       return;
@@ -187,7 +195,11 @@ export class DomNodeRenderer {
 
     this.resizeObserver.unobserve(element);
     delete element.__cy_id;
-    this.nodeElements.delete(node.id());
+    this.nodeElements.delete(nodeId);
+
+    if (this.appendedNodeIds.delete(nodeId)) {
+      element.parentNode?.removeChild(element);
+    }
   }
 
   private syncViewport(): void {
