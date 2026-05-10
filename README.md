@@ -5,8 +5,9 @@ DOM element by setting the `dom` node data will cause the DOM element to be
 rendered on top of the node, and the node will be set to the size of the DOM
 element.
 
-For a full working demo, see [codepen abWdVOG](https://codepen.io/mwri/pen/abWdVOG).
-There are also more demos in [./demos](./demos/README.md).
+For a full working demo, see [codepen VYmaXXo](https://codepen.io/mwri/pen/VYmaXXo).
+The old v1.3.0 code pen is at [codepen abWdVOG](https://codepen.io/mwri/pen/abWdVOG).
+These and more demos are in [./demos](./demos/README.md).
 
 ## History
 
