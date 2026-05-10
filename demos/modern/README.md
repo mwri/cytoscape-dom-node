@@ -16,17 +16,17 @@ python3 -m http.server 8080
 Then open:
 
 ```text
-http://localhost:8080/demo/modern/
+http://localhost:8080/demos/modern/
 ```
 
 The demo can also be served directly from this directory because `dist` is a
 symlink to the repository build output:
 
 ```sh
-cd demo/modern
+cd demos/modern
 python3 -m http.server 8080
 ```
 
 Re-run `npm run build` after changing `src/index.ts`. Re-run
-`npm run build:demo:modern` after changing `demo/modern/src/main.ts`. The demo
-TypeScript output is generated into `demo/modern/generated`.
+`npm run build:demo:modern` after changing `demos/modern/src/main.ts`. The demo
+TypeScript output is generated into `demos/modern/generated`.

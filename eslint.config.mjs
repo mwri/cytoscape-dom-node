@@ -8,10 +8,10 @@ export default [
       "dist/**",
       "docs/**",
       "node_modules/**",
-      "demo/legacy-webpack/node_modules/**",
-      "demo/legacy-webpack/public/cytoscape-dom-node-demo.bundle.js",
-      "demo/legacy-codepen/codepen.js",
-      "demo/modern/generated/**",
+      "demos/legacy-webpack/node_modules/**",
+      "demos/legacy-webpack/public/cytoscape-dom-node-demo.bundle.js",
+      "demos/legacy-codepen/codepen.js",
+      "demos/modern/generated/**",
     ],
   },
   js.configs.recommended,
@@ -39,7 +39,7 @@ export default [
     },
   },
   {
-    files: ["demo/legacy-webpack/src/**/*.js"],
+    files: ["demos/legacy-webpack/src/**/*.js"],
     languageOptions: {
       globals: {
         clearInterval: "readonly",
@@ -51,7 +51,7 @@ export default [
     },
   },
   {
-    files: ["demo/legacy-webpack/webpack.config.js"],
+    files: ["demos/legacy-webpack/webpack.config.js"],
     languageOptions: {
       globals: {
         __dirname: "readonly",
