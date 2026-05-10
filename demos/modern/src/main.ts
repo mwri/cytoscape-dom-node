@@ -74,13 +74,58 @@ function createDomNode(id: string, index: number): HTMLElement {
       <span>${index % 2 === 0 ? "Active" : "Queued"}</span>
     </header>
     <p>${String(index + 3)} linked tasks</p>
-    <meter min="0" max="100" value="${String(45 + ((index * 13) % 45))}"></meter>
+    ${nodeControlMarkup(id, index)}
   `;
-  element.addEventListener("click", () => {
-    cy.getElementById(id).select();
-  });
+  bindNodeControls(element);
 
   return element;
+}
+
+function nodeControlMarkup(id: string, index: number): string {
+  const value = String(45 + ((index * 13) % 45));
+
+  switch (index % 4) {
+    case 1:
+      return `
+        <label class="node-control">
+          Note
+          <input aria-label="${id} note" value="Editable ${id.toUpperCase()}" />
+        </label>
+      `;
+    case 2:
+      return `
+        <div class="node-controls">
+          <button data-action="increment" type="button">Acknowledge</button>
+          <output aria-live="polite">0 clicks</output>
+        </div>
+      `;
+    case 3:
+      return `
+        <label class="node-control">
+          Priority
+          <select aria-label="${id} priority">
+            <option>Low</option>
+            <option selected>Normal</option>
+            <option>High</option>
+          </select>
+        </label>
+      `;
+    default:
+      return `<meter min="0" max="100" value="${value}"></meter>`;
+  }
+}
+
+function bindNodeControls(element: HTMLElement): void {
+  const button = element.querySelector<HTMLButtonElement>("[data-action='increment']");
+  const output = element.querySelector<HTMLOutputElement>("output");
+  let clicks = 0;
+
+  button?.addEventListener("click", () => {
+    clicks += 1;
+    if (output) {
+      output.textContent = `${String(clicks)} ${clicks === 1 ? "click" : "clicks"}`;
+    }
+  });
 }
 
 function addNode(
@@ -377,7 +422,9 @@ function deleteSelectedNode(): void {
   updateStatus();
 }
 
-function selectFallbackNode(removedNode: cytoscape.NodeSingular): cytoscape.NodeSingular | null {
+function selectFallbackNode(
+  removedNode: cytoscape.NodeSingular,
+): cytoscape.NodeSingular | null {
   const neighborhood = removedNode.neighborhood("node");
   const sibling = neighborhood[0] ?? cy.nodes().not(removedNode)[0];
 

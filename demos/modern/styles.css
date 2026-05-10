@@ -119,14 +119,15 @@ button.danger:hover:not(:disabled) {
 }
 
 .dom-node {
-  width: 134px;
-  min-height: 78px;
+  width: 168px;
+  min-height: 92px;
   padding: 10px;
   border: 1px solid rgba(23, 32, 51, 0.12);
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(23, 32, 51, 0.14);
   background: #ffffff;
-  pointer-events: auto;
+  pointer-events: none;
+  user-select: none;
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease;
@@ -167,6 +168,55 @@ button.danger:hover:not(:disabled) {
   display: block;
   width: 100%;
   height: 8px;
+}
+
+.node-control,
+.node-controls {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.dom-node input,
+.dom-node button,
+.dom-node select {
+  width: 100%;
+  min-width: 0;
+  height: 30px;
+  pointer-events: auto;
+}
+
+.dom-node input,
+.dom-node select {
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  padding: 0 8px;
+  color: #172033;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: none;
+  background: #ffffff;
+}
+
+.dom-node input {
+  user-select: text;
+}
+
+.dom-node button {
+  padding: 0 9px;
+  font-size: 12px;
+}
+
+.dom-node output {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: none;
 }
 
 .tone-blue {

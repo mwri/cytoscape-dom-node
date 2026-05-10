@@ -127,6 +127,30 @@ cy.domNode({ domContainer: someElement });
 
 The legacy `dom_container` name remains supported.
 
+`interactiveSelector` sets which child elements should receive native DOM
+interaction instead of becoming Cytoscape gestures. Matching controls get
+`pointer-events: auto`, and `pointerdown`, `mousedown`, and `touchstart` are
+stopped during capture so inputs and buttons do not start graph drags. It
+defaults to common controls:
+
+```ts
+cy.domNode({
+  interactiveSelector:
+    "input, button, select, textarea, a[href], [contenteditable]:not([contenteditable='false']), [data-cy-dom-node-interactive]",
+});
+```
+
+For draggable DOM-backed nodes, make the node shell pass pointer events through
+to Cytoscape and let the renderer re-enable matching controls:
+
+```css
+.dom-node {
+  pointer-events: none;
+}
+```
+
+Set `interactiveSelector` to `false` to disable this control isolation.
+
 ## Interaction State
 
 DOM nodes mirror Cytoscape selection state with the `selected` class. Selected

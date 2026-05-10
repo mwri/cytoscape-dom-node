@@ -9,6 +9,9 @@ import type cytoscape from "cytoscape";
 const DEFAULT_Z_INDEX = "10";
 const ACTIVE_Z_INDEX = "11";
 const SELECTED_CLASS_NAME = "selected";
+const DEFAULT_INTERACTIVE_SELECTOR =
+  "input, button, select, textarea, a[href], [contenteditable]:not([contenteditable='false']), [data-cy-dom-node-interactive]";
+const DEFAULT_INTERACTIVE_EVENTS = ["pointerdown", "mousedown", "touchstart"] as const;
 
 type CytoscapeRegistry = typeof cytoscape;
 
@@ -22,6 +25,11 @@ export type ResizeObserverConstructor = new (
 type DomNodeElement = HTMLElement & {
   __cy_id?: string;
 };
+
+interface InteractiveElementBinding {
+  element: HTMLElement;
+  previousPointerEvents: string;
+}
 
 interface DomNodeData {
   dom?: HTMLElement;
@@ -49,6 +57,18 @@ export interface DomNodeOptions {
    * browser environments that provide a polyfill.
    */
   resizeObserver?: ResizeObserverConstructor;
+
+  /**
+   * Selector for child controls that should receive native DOM interaction
+   * instead of starting Cytoscape gestures. Set to `false` to disable this
+   * automatic event isolation.
+   */
+  interactiveSelector?: string | false;
+
+  /**
+   * Event names stopped on interactive child controls during the capture phase.
+   */
+  interactiveEvents?: readonly string[];
 }
 
 declare global {
@@ -81,6 +101,12 @@ export class DomNodeRenderer {
   private readonly cy: cytoscape.Core;
   private readonly nodeElements = new Map<string, DomNodeElement>();
   private readonly appendedNodeIds = new Set<string>();
+  private readonly interactiveElementBindings = new Map<
+    string,
+    InteractiveElementBinding[]
+  >();
+  private readonly interactiveEvents: readonly string[];
+  private readonly interactiveSelector: string | false;
   private readonly resizeObserver: ResizeObserver;
   private readonly container: HTMLElement;
 
@@ -104,9 +130,16 @@ export class DomNodeRenderer {
     this.syncViewport();
   };
 
+  private readonly stopInteractiveEvent = (event: Event): void => {
+    event.stopPropagation();
+  };
+
   public constructor(cy: cytoscape.Core, options: DomNodeOptions = {}) {
     this.cy = cy;
     this.container = resolveDomContainer(cy, options);
+    this.interactiveEvents = options.interactiveEvents ?? DEFAULT_INTERACTIVE_EVENTS;
+    this.interactiveSelector =
+      options.interactiveSelector ?? DEFAULT_INTERACTIVE_SELECTOR;
     this.resizeObserver = new (resolveResizeObserver(options))((entries) => {
       for (const entry of entries) {
         this.syncNodeSize(entry.target as DomNodeElement);
@@ -146,6 +179,7 @@ export class DomNodeRenderer {
     this.resizeObserver.disconnect();
     this.nodeElements.clear();
     this.appendedNodeIds.clear();
+    this.clearInteractiveElements();
   }
 
   private bindEvents(): void {
@@ -178,6 +212,7 @@ export class DomNodeRenderer {
     } else {
       this.appendedNodeIds.delete(nodeId);
     }
+    this.bindInteractiveElements(nodeId, element);
     this.resizeObserver.observe(element);
 
     this.syncNodeSize(element);
@@ -196,6 +231,7 @@ export class DomNodeRenderer {
     this.resizeObserver.unobserve(element);
     delete element.__cy_id;
     this.nodeElements.delete(nodeId);
+    this.clearInteractiveElements(nodeId);
 
     if (this.appendedNodeIds.delete(nodeId)) {
       element.parentNode?.removeChild(element);
@@ -262,6 +298,62 @@ export class DomNodeRenderer {
 
     element.classList.toggle(SELECTED_CLASS_NAME, isSelected);
     element.style.zIndex = isActive ? ACTIVE_Z_INDEX : DEFAULT_Z_INDEX;
+  }
+
+  private bindInteractiveElements(nodeId: string, root: DomNodeElement): void {
+    this.clearInteractiveElements(nodeId);
+
+    if (!this.interactiveSelector) {
+      return;
+    }
+
+    const elements = root.querySelectorAll<HTMLElement>(this.interactiveSelector);
+    const bindings: InteractiveElementBinding[] = [];
+
+    for (const element of elements) {
+      bindings.push({
+        element,
+        previousPointerEvents: element.style.pointerEvents,
+      });
+      element.style.pointerEvents = "auto";
+
+      for (const eventName of this.interactiveEvents) {
+        element.addEventListener(eventName, this.stopInteractiveEvent, true);
+      }
+    }
+
+    if (bindings.length > 0) {
+      this.interactiveElementBindings.set(nodeId, bindings);
+    }
+  }
+
+  private clearInteractiveElements(nodeId?: string): void {
+    if (nodeId) {
+      this.clearInteractiveElementBindings(nodeId);
+      return;
+    }
+
+    for (const id of this.interactiveElementBindings.keys()) {
+      this.clearInteractiveElementBindings(id);
+    }
+  }
+
+  private clearInteractiveElementBindings(nodeId: string): void {
+    const bindings = this.interactiveElementBindings.get(nodeId);
+
+    if (!bindings) {
+      return;
+    }
+
+    for (const binding of bindings) {
+      binding.element.style.pointerEvents = binding.previousPointerEvents;
+
+      for (const eventName of this.interactiveEvents) {
+        binding.element.removeEventListener(eventName, this.stopInteractiveEvent, true);
+      }
+    }
+
+    this.interactiveElementBindings.delete(nodeId);
   }
 }
 

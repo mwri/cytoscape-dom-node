@@ -381,6 +381,99 @@ it("keeps caller-owned skipped DOM elements in place when Cytoscape nodes are re
   expect(dom.__cy_id).toBeUndefined();
 });
 
+it("isolates interactive child controls from Cytoscape gesture events", () => {
+  const domContainer = document.createElement("div");
+  const dom = document.createElement("div");
+  const input = document.createElement("input");
+  const plainChild = document.createElement("div");
+  const bubbledEvents: string[] = [];
+
+  dom.append(input, plainChild);
+  dom.addEventListener("pointerdown", () => {
+    bubbledEvents.push("pointerdown");
+  });
+
+  const cy = createCore([
+    {
+      data: {
+        dom,
+        id: "a",
+      },
+    },
+  ]);
+
+  createRenderer(cy, { domContainer });
+
+  expect(input.style.pointerEvents).toBe("auto");
+
+  input.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+  plainChild.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+
+  expect(bubbledEvents).toEqual(["pointerdown"]);
+});
+
+it("allows interactive child control isolation to be disabled", () => {
+  const domContainer = document.createElement("div");
+  const dom = document.createElement("div");
+  const input = document.createElement("input");
+  const bubbledEvents: string[] = [];
+
+  dom.append(input);
+  dom.addEventListener("pointerdown", () => {
+    bubbledEvents.push("pointerdown");
+  });
+
+  const cy = createCore([
+    {
+      data: {
+        dom,
+        id: "a",
+      },
+    },
+  ]);
+
+  createRenderer(cy, {
+    domContainer,
+    interactiveSelector: false,
+  });
+
+  input.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+
+  expect(input.style.pointerEvents).toBe("");
+  expect(bubbledEvents).toEqual(["pointerdown"]);
+});
+
+it("cleans up interactive child control isolation when nodes are removed", () => {
+  const domContainer = document.createElement("div");
+  const dom = document.createElement("div");
+  const input = document.createElement("input");
+  const bubbledEvents: string[] = [];
+
+  input.style.pointerEvents = "all";
+  dom.append(input);
+  dom.addEventListener("pointerdown", () => {
+    bubbledEvents.push("pointerdown");
+  });
+
+  const cy = createCore([
+    {
+      data: {
+        dom,
+        id: "a",
+      },
+    },
+  ]);
+
+  createRenderer(cy, { domContainer });
+  input.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+
+  cy.getElementById("a").remove();
+  input.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+
+  expect(input.style.pointerEvents).toBe("all");
+  expect(bubbledEvents).toEqual(["pointerdown"]);
+});
+
 it("creates a DOM overlay next to Cytoscape canvas when no container is passed", () => {
   const cyContainer = document.createElement("div");
   const canvas = document.createElement("canvas");
