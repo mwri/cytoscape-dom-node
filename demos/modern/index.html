@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>cytoscape-dom-node modern demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "cytoscape": "https://esm.sh/cytoscape@3.33.3",
+          "cytoscape-dom-node": "./dist/index.mjs"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="toolbar" aria-label="Demo controls">
+        <div>
+          <h1>cytoscape-dom-node</h1>
+          <p>Modern ESM demo using the local TypeScript build.</p>
+        </div>
+        <div class="actions">
+          <button id="add-node" type="button">Add Node</button>
+          <button id="select-random" type="button">Select</button>
+          <button id="run-layout" type="button">Layout</button>
+          <button id="fit-graph" type="button">Fit</button>
+        </div>
+      </header>
+
+      <section class="workspace" aria-label="Cytoscape workspace">
+        <div class="graph-stage">
+          <div id="cy" class="cy"></div>
+          <div id="dom-layer" class="dom-layer"></div>
+        </div>
+        <aside class="status-panel" aria-label="Graph status">
+          <dl>
+            <div>
+              <dt>Nodes</dt>
+              <dd id="node-count">0</dd>
+            </div>
+            <div>
+              <dt>Edges</dt>
+              <dd id="edge-count">0</dd>
+            </div>
+            <div>
+              <dt>Selected</dt>
+              <dd id="selected-node">None</dd>
+            </div>
+            <div>
+              <dt>DOM Lookup</dt>
+              <dd id="dom-lookup">None</dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+    </main>
+
+    <script type="module" src="./generated/main.js"></script>
+  </body>
+</html>

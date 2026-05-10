@@ -1,1 +1,6 @@
-/node_modules/
+/node_modules
+/coverage
+/docs
+/demos/legacy-webpack/public/cytoscape-dom-node-demo.bundle.js
+/demos/modern/generated
+/.vscode

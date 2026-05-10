@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>cytoscape-dom-node legacy CodePen demo</title>
+    <link rel="stylesheet" href="./codepen.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "https://esm.sh/cytoscape-dom-node@1.3.0": "/dist/index.mjs"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
+      const response = await fetch("./codepen.html");
+      document.body.insertAdjacentHTML("afterbegin", await response.text());
+      await import("./codepen.js");
+    </script>
+  </body>
+</html>

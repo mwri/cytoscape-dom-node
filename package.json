@@ -13,10 +13,40 @@
     "email": "mjw@methodanalysis.com"
   },
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "browser": "./dist/index.global.js",
+  "unpkg": "./dist/index.global.js",
+  "jsdelivr": "./dist/index.global.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./src/index.js": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src/index.js",
+    "LICENSE",
+    "README.md"
+  ],
   "url": "https://github.com/mwri/cytoscape-dom-node",
   "scripts": {
-    "prepublishOnly": "./node_modules/grunt-cli/bin/grunt prepublish"
+    "build": "tsup",
+    "build:demo:modern": "tsc -p demo/modern/tsconfig.json",
+    "check": "npm run lint && npm run typecheck && npm run test:coverage && npm run build && npm run build:demo:modern && npm run docs",
+    "docs": "typedoc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "prepublishOnly": "npm run check",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -30,9 +60,17 @@
     "cytoscape": "^3.19.0"
   },
   "devDependencies": {
-    "grunt": "^1.5.3",
-    "grunt-cli": "^1.4.3",
-    "grunt-git": "^1.1.1",
-    "load-grunt-tasks": "^5.1.0"
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.6.2",
+    "@vitest/coverage-v8": "^4.1.5",
+    "cytoscape": "^3.33.3",
+    "eslint": "^10.3.0",
+    "jsdom": "^29.1.1",
+    "prettier": "^3.8.3",
+    "tsup": "^8.5.1",
+    "typedoc": "^0.28.19",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.2",
+    "vitest": "^4.1.5"
   }
 }
