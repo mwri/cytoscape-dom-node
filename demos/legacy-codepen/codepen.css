@@ -1,0 +1,13 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.my-cy {
+  width: 100%;
+  height: 100%;
+}
+
+.my-cy-node {
+  background-color: #e55;
+}

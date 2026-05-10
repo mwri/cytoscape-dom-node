@@ -1,0 +1,12 @@
+coverage/
+dist/
+docs/
+node_modules/
+demo/legacy-webpack/node_modules/
+demo/legacy-webpack/public/cytoscape-dom-node-demo.bundle.js
+demo/legacy-codepen/codepen.html
+demo/legacy-codepen/codepen.css
+demo/legacy-codepen/codepen.js
+demo/modern/generated/
+package-lock.json
+demo/legacy-webpack/package-lock.json
