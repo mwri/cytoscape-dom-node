@@ -10,7 +10,7 @@ There are also more demos in [./demos](./demos/README.md).
 
 ## History
 
-v2.0.0 is a typescript conversion, and SHOULD be backwards compatible with v1.
+v2.0.0 - v2.0.1 is a typescript conversion, and SHOULD be backwards compatible with v1.
 v1.3.0 is the latest pre typescript incarnation.
 
 ## Dependencies

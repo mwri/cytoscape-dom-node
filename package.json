@@ -1,6 +1,6 @@
 {
   "name": "cytoscape-dom-node",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Cytoscape extension for making nodes into DOM elements",
   "keywords": [
     "cytoscape",
